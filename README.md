@@ -2,15 +2,17 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8">
-  <title>Share Flex</title>
+  <title>Share Flex (LIFF Demo)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
 </head>
 
 <body style="font-family:sans-serif;text-align:center;padding:30px">
 
-  <h2>แชร์โปรโมชั่น</h2>
-  <button onclick="shareFlex()" style="
+  <h2>แชร์โปรโมชั่น (LIFF Demo)</h2>
+  <p>หมายเหตุ: แก้ค่า LIFF_ID และ image URL ในสคริปต์ด้านล่างให้เป็นของคุณก่อนใช้งานจริง</p>
+
+  <button id="shareBtn" style="
     background:#00C300;
     color:#fff;
     border:none;
@@ -22,24 +24,23 @@
   </button>
 
 <script>
-async function shareFlex() {
-  await liff.init({ liffId: "2008740636-oTHcHAmb" });
+/*
+  ขั้นตอนก่อนใช้งานจริง:
+  1) เปลี่ยนค่า LIFF_ID ให้เป็น LIFF ID ของแอปคุณ (จาก LINE Developers)
+  2) เปลี่ยน imageUrl ให้เป็น direct public image URL (ไม่ใช่ Google Drive share page)
+  3) โฮสต์ไฟล์นี้ผ่าน HTTPS และเพิ่มURL ใน LIFF settings (Valid LIFF URLs)
+  4) เปิดไฟล์ผ่าน LINE in-app browser หรือ LIFF preview เพื่อทดสอบ shareTargetPicker
+*/
 
-  await liff.shareTargetPicker([
-    {
-      type: "flex",
-      altText: "แจกฟรี",
-      contents: FLEX_JSON
-    }
-  ]);
-}
+const LIFF_ID = "2008740636-oTHcHAmb"; // <<< เปลี่ยนเป็น LIFF ID ของคุณ
+const imageUrl = "https://your-public-hosting.com/path/to/image.jpg"; // <<< เปลี่ยนเป็น direct image URL
 
 // Flex JSON
 const FLEX_JSON = {
   "type": "bubble",
   "hero": {
     "type": "image",
-    "url": "https://lh3.googleusercontent.com/d/1DZBc3t9TDhPrk-z31neQ_-PRwC6MrLG6",
+    "url": imageUrl,
     "size": "full",
     "aspectRatio": "1:1",
     "aspectMode": "cover",
@@ -91,6 +92,52 @@ const FLEX_JSON = {
     ]
   }
 };
+
+async function initLiff() {
+  try {
+    await liff.init({ liffId: LIFF_ID });
+    console.log('LIFF initialized');
+
+    if (!liff.isInClient()) {
+      // บอกผู้ใช้ว่าฟีเจอร์แชร์อาจไม่ทำงานในเบราว์เซอร์ปกติ
+      console.warn('Not running inside LINE app — shareTargetPicker may not work outside LINE in-app browser.');
+    }
+
+    if (!liff.isApiAvailable('shareTargetPicker')) {
+      console.warn('shareTargetPicker API is not available in this LIFF SDK/environment.');
+    }
+  } catch (err) {
+    console.error('LIFF init failed:', err);
+    alert('LIFF initialization failed: ' + (err.message || err));
+  }
+}
+
+async function shareFlex() {
+  try {
+    if (!liff.isApiAvailable('shareTargetPicker')) {
+      alert('shareTargetPicker ไม่สามารถใช้ได้ในสภาพแวดล้อมนี้');
+      return;
+    }
+
+    await liff.shareTargetPicker([
+      {
+        type: "flex",
+        altText: "แจกฟรี",
+        contents: FLEX_JSON
+      }
+    ]);
+
+    alert('แชร์คำร้องขอเรียบร้อย (ถ้าคุณเลือกผู้รับแล้ว)');
+  } catch (err) {
+    console.error('shareTargetPicker error:', err);
+    alert('เกิดข้อผิดพลาดในการแชร์: ' + (err.message || err));
+  }
+}
+
+document.getElementById('shareBtn').addEventListener('click', shareFlex);
+
+// เรียก init ตอนโหลดหน้า
+initLiff();
 </script>
 
 </body>
