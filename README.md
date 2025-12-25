@@ -10,7 +10,7 @@
 <body style="font-family:sans-serif;text-align:center;padding:30px">
 
   <h2>แชร์โปรโมชั่น (LIFF Demo)</h2>
-  <p>หมายเหตุ: แก้ค่า LIFF_ID และ image URL ในสคริปต์ด้านล่างให้เป็นของคุณก่อนใช้งานจริง</p>
+  <p>หมายเหตุ: LIFF_ID ถูกตั้งค่าแล้ว และ imageUrl ชี้ไปยังภาพที่คุณให้มา หากต้องการเก็บไฟล์ใน repo ให้ส่งรูปโดยตรงเพื่ออัปโหลด</p>
 
   <button id="shareBtn" style="
     background:#00C300;
@@ -24,16 +24,8 @@
   </button>
 
 <script>
-/*
-  ขั้นตอนก่อนใช้งานจริง:
-  1) เปลี่ยนค่า LIFF_ID ให้เป็น LIFF ID ของแอปคุณ (จาก LINE Developers)
-  2) เปลี่ยน imageUrl ให้เป็น direct public image URL (ไม่ใช่ Google Drive share page)
-  3) โฮสต์ไฟล์นี้ผ่าน HTTPS และเพิ่มURL ใน LIFF settings (Valid LIFF URLs)
-  4) เปิดไฟล์ผ่าน LINE in-app browser หรือ LIFF preview เพื่อทดสอบ shareTargetPicker
-*/
-
-const LIFF_ID = "2008740636-oTHcHAmb"; // <<< เปลี่ยนเป็น LIFF ID ของคุณ
-const imageUrl = "https://i.postimg.cc/RhmkBLyy/kherd-tfr-100-2.jpg"; // <<< เปลี่ยนเป็น direct image URL
+const LIFF_ID = "2008740636-oTHcHAmb"; // LIFF ID ของคุณ
+const imageUrl = "https://i.postimg.cc/RhmkBLyy/kherd-tfr-100-2.jpg"; // ใช้ URL ที่คุณให้มา
 
 // Flex JSON
 const FLEX_JSON = {
@@ -99,7 +91,6 @@ async function initLiff() {
     console.log('LIFF initialized');
 
     if (!liff.isInClient()) {
-      // บอกผู้ใช้ว่าฟีเจอร์แชร์อาจไม่ทำงานในเบราว์เซอร์ปกติ
       console.warn('Not running inside LINE app — shareTargetPicker may not work outside LINE in-app browser.');
     }
 
