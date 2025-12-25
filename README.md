@@ -33,7 +33,7 @@
 */
 
 const LIFF_ID = "2008740636-oTHcHAmb"; // <<< เปลี่ยนเป็น LIFF ID ของคุณ
-const imageUrl = "https://your-public-hosting.com/path/to/image.jpg"; // <<< เปลี่ยนเป็น direct image URL
+const imageUrl = "https://i.postimg.cc/RhmkBLyy/kherd-tfr-100-2.jpg"; // <<< เปลี่ยนเป็น direct image URL
 
 // Flex JSON
 const FLEX_JSON = {
